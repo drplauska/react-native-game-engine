@@ -16,7 +16,7 @@ type TouchProcessorFinalReturn = ReturnType<
   ReturnType<typeof DefaultTouchProcessor>
 >;
 type DispatchType = "started" | "stopped" | "swapped";
-type DispatchFunction = { type: DispatchType };
+type DispatchFunction = { type: DispatchType | string };
 
 interface DetailedTouchEvent {
   event: NativeTouchEvent;

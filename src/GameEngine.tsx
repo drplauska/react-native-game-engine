@@ -61,7 +61,7 @@ interface GameEngineProps {
   touchProcessor?: TouchProcessorFinalReturn;
   timer?: DefaultTimer;
   running?: boolean;
-  onEvent?: ({ type }: { type: string }) => void;
+  onEvent?: ({ type }: { type: DispatchFunction }) => void;
   style?: StyleProp<ViewStyle>;
   children?: React.ReactNode;
 }
@@ -79,7 +79,7 @@ export default class GameEngine extends Component<
   screen: ScaledSize;
   previousTime: number;
   previousDelta: number;
-  events: NativeTouchEvent[];
+  events: DispatchFunction[];
   touchProcessor: TouchProcessorFinalReturn;
   layout: LayoutRectangle;
   renderer: Renderer;
