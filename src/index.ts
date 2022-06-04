@@ -9,7 +9,7 @@ export {
   GameLoop,
   GameLoop as BasicGameLoop,
   GameEngineHook as GameEngine,
-  GameEngine as GE,
+  // GameEngine,
   GameEngine as ComponentEntitySystem,
   GameEngine as ComponentEntitySystems,
   DefaultTouchProcessor,

@@ -117,7 +117,7 @@ const GameEngine = (props: GameEngineProps) => {
         currentTouchProcessor.end();
       }
     };
-  });
+  }, []);
 
   useEffect(() => {
     if (running) {
@@ -196,6 +196,11 @@ const GameEngine = (props: GameEngineProps) => {
     },
     [currentEntities, touches, screenSize, layout, events, dispatch]
   );
+
+  useEffect(() => {
+    timer.unsubscribe(updateHandler);
+    timer.subscribe(updateHandler);
+  }, [updateHandler]);
 
   const onLayoutHandler = (e: LayoutChangeEvent) => {
     screenSize = Dimensions.get("window");
