@@ -69,7 +69,7 @@ interface GameEngineProps {
 
 let screenSize = Dimensions.get("window");
 
-const GameEngine = (props: GameEngineProps) => {
+const GameEngine = React.forwardRef((props: GameEngineProps, ref) => {
   const {
     systems = [],
     touchProcessor = DefaultTouchProcessor({
@@ -219,7 +219,7 @@ const GameEngine = (props: GameEngineProps) => {
   const onTouchEndHandler = (e: GestureResponderEvent) => {
     currentTouchProcessor.process("end", e.nativeEvent);
   };
-
+  ref = { start, stop };
   if (!currentEntities) {
     return null;
   }
@@ -240,7 +240,7 @@ const GameEngine = (props: GameEngineProps) => {
       </View>
     </View>
   );
-};
+});
 
 // GameEngine.
 
