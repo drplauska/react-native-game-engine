@@ -61,7 +61,7 @@ interface GameEngineProps {
   touchProcessor?: TouchProcessorFinalReturn;
   timer?: DefaultTimer;
   running?: boolean;
-  onEvent?: ({ type }: { type: DispatchFunction }) => void;
+  onEvent?: ({ type }: { type: DispatchFunction }) => void; //test
   style?: StyleProp<ViewStyle>;
   children?: React.ReactNode;
 }
