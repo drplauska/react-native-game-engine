@@ -1,5 +1,6 @@
 import { NativeTouchEvent, GestureResponderEvent } from "react-native";
 import { Subject, of, merge, EMPTY } from "rxjs";
+import { AnonymousSubject } from "rxjs/internal/Subject";
 import {
   mergeMap,
   first,
@@ -27,7 +28,7 @@ const DefaultTouchProcessor = ({
   return (touches: NativeTouchEvent[]) => {
     const touchStart = new Subject<NativeTouchEvent>().pipe(
       map((e) => ({ id: e.identifier, type: "start", event: e }))
-    );
+    ) as AnonymousSubject<NativeTouchEvent>;
     const touchMove = new Subject<NativeTouchEvent>().pipe(
       map((e) => ({ id: e.identifier, type: "move", event: e }))
     );
@@ -103,7 +104,7 @@ const DefaultTouchProcessor = ({
       ) {
         switch (type) {
           case "start":
-            console.log(touchStart);
+            console.log(touchStart.next());
             touchStart.next(event);
             break;
           case "move":
