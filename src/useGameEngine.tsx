@@ -69,7 +69,7 @@ interface GameEngineProps {
 
 let screenSize = Dimensions.get("window");
 
-const GameEngine = React.forwardRef((props: GameEngineProps, ref) => {
+const useGameEngine = (props: GameEngineProps) => {
   const {
     systems = [],
     touchProcessor = DefaultTouchProcessor({
@@ -82,7 +82,6 @@ const GameEngine = React.forwardRef((props: GameEngineProps, ref) => {
     running = true,
     style,
     timer = new DefaultTimer(),
-    children,
   } = props;
   const [touches, setTouches] = useState<NativeTouchEvent[]>([]);
   const [previousTime, setPreviousTime] = useState<number | null>(null);
@@ -224,23 +223,26 @@ const GameEngine = React.forwardRef((props: GameEngineProps, ref) => {
     return null;
   }
 
-  return (
-    <View style={[css.container, style]} onLayout={onLayoutHandler}>
-      <View
-        style={css.entityContainer}
-        onTouchStart={onTouchStartHandler}
-        onTouchMove={onTouchMoveHandler}
-        onTouchEnd={onTouchEndHandler}
-      >
-        {!!layout && renderer(currentEntities, screenSize, layout)}
-      </View>
+  return {
+    commands: { start, stop },
+    Engine: (
+      <View style={[css.container, style]} onLayout={onLayoutHandler}>
+        <View
+          style={css.entityContainer}
+          onTouchStart={onTouchStartHandler}
+          onTouchMove={onTouchMoveHandler}
+          onTouchEnd={onTouchEndHandler}
+        >
+          {!!layout && renderer(currentEntities, screenSize, layout)}
+        </View>
 
-      <View pointerEvents={"box-none"} style={StyleSheet.absoluteFill}>
-        {children}
+        {/* <View pointerEvents={"box-none"} style={StyleSheet.absoluteFill}>
+          {children}
+        </View> */}
       </View>
-    </View>
-  );
-});
+    ),
+  };
+};
 
 // GameEngine.
 
@@ -258,4 +260,4 @@ const css = StyleSheet.create({
   },
 });
 
-export default GameEngine;
+export default useGameEngine;
