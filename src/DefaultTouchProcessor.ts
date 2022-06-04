@@ -104,7 +104,7 @@ const DefaultTouchProcessor = ({
       ) {
         switch (type) {
           case "start":
-            console.log(touchStart.next());
+            console.log(touchStart.next);
             touchStart.next(event);
             break;
           case "move":
