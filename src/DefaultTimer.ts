@@ -14,10 +14,10 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-import { Callback } from "types";
+import { OnUpdateCallback } from "types";
 
 class DefaultTimer {
-  subscribers: Callback[];
+  subscribers: OnUpdateCallback[];
   loopId: number | null;
 
   constructor() {
@@ -25,7 +25,7 @@ class DefaultTimer {
     this.loopId = null;
   }
 
-  loop = (time?: number) => {
+  loop = (time = 0) => {
     if (this.loopId) {
       this.subscribers.forEach((callback) => {
         callback(time);
@@ -48,13 +48,13 @@ class DefaultTimer {
     }
   }
 
-  subscribe(callback: Callback) {
+  subscribe(callback: OnUpdateCallback) {
     if (this.subscribers.indexOf(callback) === -1) {
       this.subscribers.push(callback);
     }
   }
 
-  unsubscribe(callback: Callback) {
+  unsubscribe(callback: OnUpdateCallback) {
     this.subscribers = this.subscribers.filter((s) => s !== callback);
   }
 }

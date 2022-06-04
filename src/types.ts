@@ -9,7 +9,7 @@ type Entity = {
 };
 type Entities = { [key: string]: Entity };
 type ScreenType = ScaledSize; // can't name just Screen because there's inbuilt type for that
-type Callback = (time?: number) => void;
+type OnUpdateCallback = (time: number) => void;
 
 type TouchEventType = "start" | "end" | "move" | "press" | "long-press";
 type TouchProcessorFinalReturn = ReturnType<
@@ -21,8 +21,8 @@ type DispatchFunction = { type: DispatchType | string };
 interface TimeUpdate {
   current: number;
   delta: number;
-  previous: number;
-  previousDelta: number;
+  previous: number | null;
+  previousDelta: number | null;
 }
 
 interface DetailedTouchEvent {
@@ -55,7 +55,7 @@ export {
   Entity,
   Entities,
   ScreenType,
-  Callback,
+  OnUpdateCallback,
   DetailedTouchEvent,
   TouchProcessorFinalReturn,
   DispatchFunction,

@@ -6,6 +6,10 @@ import {
   ScaledSize,
   LayoutRectangle,
   NativeTouchEvent,
+  LayoutChangeEvent,
+  GestureResponderEvent,
+  StyleProp,
+  ViewStyle,
 } from "react-native";
 import {
   DetailedTouchEvent,
@@ -17,9 +21,9 @@ import DefaultTouchProcessor from "./DefaultTouchProcessor";
 
 type Time = {
   current: number;
-  previous: number;
+  previous: number | null;
   delta: number;
-  previousDelta: number;
+  previousDelta: number | null;
 };
 
 interface GameLoopProps {
@@ -37,6 +41,8 @@ interface GameLoopProps {
     layout: LayoutRectangle | null;
     time: Time;
   }) => void;
+  children?: React.ReactNode;
+  style?: StyleProp<ViewStyle>;
 }
 
 export default class GameLoop extends Component<GameLoopProps> {
@@ -47,6 +53,14 @@ export default class GameLoop extends Component<GameLoopProps> {
   previousDelta: number | null;
   touchProcessor: TouchProcessorFinalReturn;
   layout: LayoutRectangle | null;
+
+  static defaultProps = {
+    touchProcessor: DefaultTouchProcessor({
+      triggerPressEventBefore: 200,
+      triggerLongPressEventAfter: 700,
+    }),
+    running: true,
+  };
 
   constructor(props: GameLoopProps) {
     super(props);
@@ -110,21 +124,21 @@ export default class GameLoop extends Component<GameLoopProps> {
     this.previousDelta = args.time.delta;
   };
 
-  onLayoutHandler = (e) => {
+  onLayoutHandler = (e: LayoutChangeEvent) => {
     this.screen = Dimensions.get("window");
     this.layout = e.nativeEvent.layout;
     this.forceUpdate();
   };
 
-  onTouchStartHandler = (e) => {
+  onTouchStartHandler = (e: GestureResponderEvent) => {
     this.touchProcessor.process("start", e.nativeEvent);
   };
 
-  onTouchMoveHandler = (e) => {
+  onTouchMoveHandler = (e: GestureResponderEvent) => {
     this.touchProcessor.process("move", e.nativeEvent);
   };
 
-  onTouchEndHandler = (e) => {
+  onTouchEndHandler = (e: GestureResponderEvent) => {
     this.touchProcessor.process("end", e.nativeEvent);
   };
 
@@ -142,14 +156,6 @@ export default class GameLoop extends Component<GameLoopProps> {
     );
   }
 }
-
-GameLoop.defaultProps = {
-  touchProcessor: DefaultTouchProcessor({
-    triggerPressEventBefore: 200,
-    triggerLongPressEventAfter: 700,
-  }),
-  running: true,
-};
 
 const css = StyleSheet.create({
   container: {

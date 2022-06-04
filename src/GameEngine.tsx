@@ -24,7 +24,7 @@ import type {
 } from "./types";
 import DefaultTouchProcessor from "./DefaultTouchProcessor";
 
-interface Props {
+interface PropsForEntities {
   initState?: any;
   initialState?: any;
   state?: any;
@@ -33,7 +33,7 @@ interface Props {
   entities?: any;
 }
 
-const getEntitiesFromProps = (props: Props) =>
+const getEntitiesFromProps = (props: PropsForEntities) =>
   props.initState ||
   props.initialState ||
   props.state ||
@@ -53,13 +53,13 @@ const isPromise = (obj: any): obj is Promise<any> => {
 };
 
 interface GameEngineProps {
-  systems?: ((
+  systems: ((
     entities: Entities,
     { touches, time }: { touches: DetailedTouchEvent[]; time: TimeUpdate }
   ) => Entities)[];
   entities?: Entities | Promise<Entities>;
   renderer?: Renderer;
-  touchProcessor: TouchProcessorFinalReturn;
+  touchProcessor: ReturnType<typeof DefaultTouchProcessor>;
   timer?: DefaultTimer;
   running?: boolean;
   onEvent?: ({ type }: DispatchFunction) => void;
@@ -76,13 +76,13 @@ export default class GameEngine extends Component<
   GameEngineState
 > {
   timer: DefaultTimer;
-  touches: DetailedTouchEvent[];
+  touches: NativeTouchEvent[];
   screen: ScaledSize;
   previousTime: number | null;
   previousDelta: number | null;
   events: DispatchFunction[];
   touchProcessor: TouchProcessorFinalReturn;
-  layout: LayoutRectangle;
+  layout: LayoutRectangle | null;
 
   static defaultProps = {
     systems: [],
@@ -136,7 +136,7 @@ export default class GameEngine extends Component<
     }
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps: GameEngineProps) {
     if (nextProps.running !== this.props.running) {
       if (nextProps.running) this.start();
       else this.stop();
@@ -253,7 +253,8 @@ export default class GameEngine extends Component<
           onTouchMove={this.onTouchMoveHandler}
           onTouchEnd={this.onTouchEndHandler}
         >
-          {this.props.renderer(this.state.entities, this.screen, this.layout)}
+          {!!this.props.renderer &&
+            this.props.renderer(this.state.entities, this.screen, this.layout)}
         </View>
 
         <View pointerEvents={"box-none"} style={StyleSheet.absoluteFill}>
