@@ -224,7 +224,7 @@ const useGameEngine = (props: GameEngineProps) => {
   }
 
   return {
-    commands: { start, stop },
+    commands: { start, stop, swap },
     Engine: (
       <View style={[css.container, style]} onLayout={onLayoutHandler}>
         <View
