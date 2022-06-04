@@ -113,14 +113,14 @@ const DefaultTouchProcessor = ({
             touchEnd.next(event);
             break;
         }
-      },
-      end() {
-        subscriptions.forEach((x) => x.unsubscribe());
         console.log(touchStart.unsubscribe);
         console.log(touchMove.unsubscribe);
         console.log(touchEnd.unsubscribe);
         console.log(touchPress.unsubscribe);
         console.log("-----");
+      },
+      end() {
+        subscriptions.forEach((x) => x.unsubscribe());
         touchStart.unsubscribe();
         touchMove.unsubscribe();
         touchEnd.unsubscribe();
