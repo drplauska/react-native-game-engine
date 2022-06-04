@@ -1,6 +1,5 @@
 import { NativeTouchEvent, GestureResponderEvent } from "react-native";
 import { Subject, of, merge, EMPTY } from "rxjs";
-import { AnonymousSubject } from "rxjs/internal/Subject";
 import {
   mergeMap,
   first,
@@ -113,11 +112,6 @@ const DefaultTouchProcessor = ({
             touchEnd.next(event);
             break;
         }
-        console.log(touchStart.unsubscribe);
-        console.log(touchMove.unsubscribe);
-        console.log(touchEnd.unsubscribe);
-        console.log(touchPress.unsubscribe);
-        console.log("-----");
       },
       end() {
         subscriptions.forEach((x) => x.unsubscribe());

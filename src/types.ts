@@ -44,6 +44,12 @@ type Renderer = (
   layout: LayoutRectangle
 ) => React.ReactNode;
 
+interface TouchProcessorOptions {
+  triggerPressEventBefore: number;
+  triggerLongPressEventAfter: number;
+  moveThreshold: number;
+}
+
 export {
   Renderer,
   Entity,
@@ -55,4 +61,5 @@ export {
   DispatchFunction,
   TimeUpdate,
   TouchEventType,
+  TouchProcessorOptions,
 };
