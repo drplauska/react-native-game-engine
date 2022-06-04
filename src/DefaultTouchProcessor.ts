@@ -86,7 +86,7 @@ const DefaultTouchProcessor = ({
       ),
       map((e) => ({ ...e, type: "long-press" }))
     );
-
+    console.log("ir sitas");
     const subscriptions = [
       touchStart,
       touchEnd,
