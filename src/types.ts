@@ -54,4 +54,5 @@ export {
   TouchProcessorFinalReturn,
   DispatchFunction,
   TimeUpdate,
+  TouchEventType,
 };

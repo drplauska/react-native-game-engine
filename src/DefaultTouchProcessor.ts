@@ -1,4 +1,4 @@
-import { NativeTouchEvent } from "react-native";
+import { NativeTouchEvent, GestureResponderEvent } from "react-native";
 import { Subject, of, merge, EMPTY } from "rxjs";
 import {
   mergeMap,
@@ -11,6 +11,7 @@ import {
   filter,
   pairwise,
 } from "rxjs/operators";
+import { TouchEventType } from "types";
 
 interface DefaultTouchProcessorProps {
   triggerPressEventBefore?: number;
@@ -80,28 +81,27 @@ const DefaultTouchProcessor = ({
         of(e).pipe(
           delay(triggerLongPressEventAfter),
           takeUntil(
-            merge(touchMoveDelta, touchEnd).pipe(first((x) => x.id === e.id))
+            merge(touchMoveDelta, touchEnd).pipe(first((x) => x?.id === e.id))
           )
         )
       ),
       map((e) => ({ ...e, type: "long-press" }))
     );
-    console.log("ir sitas");
+
     const subscriptions = [
       touchStart,
       touchEnd,
       touchPress,
       longTouch,
       touchMoveDelta,
-    ].map((x) =>
-      x.subscribe((y) => {
-        console.log("sitas", y);
-        touches.push(y);
-      })
-    );
+    ].map((x) => x.subscribe((y) => touches.push(y)));
 
     return {
-      process(type, event) {
+      process(
+        type: TouchEventType,
+        event: GestureResponderEvent["nativeEvent"]
+      ) {
+        return;
         switch (type) {
           case "start":
             touchStart.next(event);
