@@ -5,7 +5,8 @@
     "module": "CommonJS",
     "strict": true,
     "noImplicitAny": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "jsx": "react-jsx"
   },
   "include": ["src/*"],
   "exclude": ["node_modules"]

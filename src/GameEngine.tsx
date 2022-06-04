@@ -59,27 +59,27 @@ interface GameEngineProps {
   ) => Entities)[];
   entities?: Entities | Promise<Entities>;
   renderer?: Renderer;
-  touchProcessor?: TouchProcessorFinalReturn;
-  timer?: typeof DefaultTimer;
+  touchProcessor: TouchProcessorFinalReturn;
+  timer?: DefaultTimer;
   running?: boolean;
   onEvent?: ({ type }: DispatchFunction) => void;
   style?: StyleProp<ViewStyle>;
   children?: React.ReactNode;
 }
 
-interface GameEngineStateProps {
-  entities: Entities;
+interface GameEngineState {
+  entities: null | Entities;
 }
 
 export default class GameEngine extends Component<
   GameEngineProps,
-  GameEngineStateProps
+  GameEngineState
 > {
   timer: DefaultTimer;
   touches: DetailedTouchEvent[];
   screen: ScaledSize;
-  previousTime: number;
-  previousDelta: number;
+  previousTime: number | null;
+  previousDelta: number | null;
   events: DispatchFunction[];
   touchProcessor: TouchProcessorFinalReturn;
   layout: LayoutRectangle;
@@ -95,7 +95,7 @@ export default class GameEngine extends Component<
     running: true,
   };
 
-  constructor(props) {
+  constructor(props: GameEngineProps) {
     super(props);
     this.state = {
       entities: null,
@@ -131,7 +131,9 @@ export default class GameEngine extends Component<
   componentWillUnmount() {
     this.stop();
     this.timer.unsubscribe(this.updateHandler);
-    if (this.touchProcessor.end) this.touchProcessor.end();
+    if (this.touchProcessor.end) {
+      this.touchProcessor.end();
+    }
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {

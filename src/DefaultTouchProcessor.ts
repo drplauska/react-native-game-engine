@@ -1,4 +1,5 @@
-import { Observable, Subject, empty, of, merge } from "rxjs";
+import { NativeTouchEvent } from "react-native";
+import { Subject, empty, of, merge, EMPTY } from "rxjs";
 import {
   mergeMap,
   first,
@@ -11,23 +12,31 @@ import {
   pairwise,
 } from "rxjs/operators";
 
+interface DefaultTouchProcessorProps {
+  triggerPressEventBefore?: number;
+  triggerLongPressEventAfter?: number;
+  moveThreshold?: number;
+}
+
 const DefaultTouchProcessor = ({
   triggerPressEventBefore = 200,
   triggerLongPressEventAfter = 700,
   moveThreshold = 0,
-}) => {
-  return (touches) => {
-    let touchStart = new Subject().pipe(
+}: DefaultTouchProcessorProps) => {
+  return (touches: NativeTouchEvent[]) => {
+    const touchStart = new Subject<NativeTouchEvent>().pipe(
       map((e) => ({ id: e.identifier, type: "start", event: e }))
     );
-    let touchMove = new Subject().pipe(
+    const touchMove = new Subject<NativeTouchEvent>().pipe(
       map((e) => ({ id: e.identifier, type: "move", event: e }))
     );
-    let touchEnd = new Subject().pipe(
+    const touchEnd = new Subject<NativeTouchEvent>().pipe(
       map((e) => ({ id: e.identifier, type: "end", event: e }))
     );
+    console.log("empty()", empty());
+    console.log("EMPTY", EMPTY);
 
-    let touchPress = touchStart.pipe(
+    const touchPress = touchStart.pipe(
       mergeMap((e) =>
         touchEnd.pipe(
           first((x) => x.id === e.id),
@@ -37,7 +46,7 @@ const DefaultTouchProcessor = ({
       map((e) => ({ ...e, type: "press" }))
     );
 
-    let touchMoveDelta = merge(touchStart, touchMove, touchEnd).pipe(
+    const touchMoveDelta = merge(touchStart, touchMove, touchEnd).pipe(
       groupBy((e) => e.id),
       mergeMap((group) =>
         group.pipe(
@@ -58,15 +67,17 @@ const DefaultTouchProcessor = ({
               };
             }
           }),
-          filter((e) => e),
-          filter(
-            (e) => e.delta.pageX ** 2 + e.delta.pageY ** 2 > moveThreshold ** 2
-          )
+          filter((e) => {
+            if (!e) {
+              return false;
+            }
+            return e.delta.pageX ** 2 + e.delta.pageY ** 2 > moveThreshold ** 2;
+          })
         )
       )
     );
 
-    let longTouch = touchStart.pipe(
+    const longTouch = touchStart.pipe(
       mergeMap((e) =>
         of(e).pipe(
           delay(triggerLongPressEventAfter),
@@ -78,7 +89,7 @@ const DefaultTouchProcessor = ({
       map((e) => ({ ...e, type: "long-press" }))
     );
 
-    let subscriptions = [
+    const subscriptions = [
       touchStart,
       touchEnd,
       touchPress,
