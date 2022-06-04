@@ -1,5 +1,5 @@
 import { NativeTouchEvent } from "react-native";
-import { Subject, empty, of, merge, EMPTY } from "rxjs";
+import { Subject, of, merge, EMPTY } from "rxjs";
 import {
   mergeMap,
   first,
@@ -33,14 +33,12 @@ const DefaultTouchProcessor = ({
     const touchEnd = new Subject<NativeTouchEvent>().pipe(
       map((e) => ({ id: e.identifier, type: "end", event: e }))
     );
-    console.log("empty()", empty());
-    console.log("EMPTY", EMPTY);
 
     const touchPress = touchStart.pipe(
       mergeMap((e) =>
         touchEnd.pipe(
           first((x) => x.id === e.id),
-          timeoutWith(triggerPressEventBefore, empty())
+          timeoutWith(triggerPressEventBefore, EMPTY)
         )
       ),
       map((e) => ({ ...e, type: "press" }))
@@ -95,7 +93,12 @@ const DefaultTouchProcessor = ({
       touchPress,
       longTouch,
       touchMoveDelta,
-    ].map((x) => x.subscribe((y) => touches.push(y)));
+    ].map((x) =>
+      x.subscribe((y) => {
+        console.log("sitas", y);
+        touches.push(y);
+      })
+    );
 
     return {
       process(type, event) {
