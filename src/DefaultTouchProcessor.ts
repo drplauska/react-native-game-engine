@@ -101,9 +101,9 @@ const DefaultTouchProcessor = ({
         type: TouchEventType,
         event: GestureResponderEvent["nativeEvent"]
       ) {
-        return;
         switch (type) {
           case "start":
+            console.log(JSON.stringify(touchStart));
             touchStart.next(event);
             break;
           case "move":
