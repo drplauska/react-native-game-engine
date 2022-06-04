@@ -1,15 +1,15 @@
 import DefaultTouchProcessor from "./DefaultTouchProcessor";
-import { NativeTouchEvent, ScaledSize } from "react-native";
+import { LayoutRectangle, NativeTouchEvent, ScaledSize } from "react-native";
+import React from "react";
 
-type Renderer = React.ElementType | { type: React.ElementType };
+type RendererElement = React.ElementType | { type: React.ElementType };
 type Entity = {
-  renderer: Renderer;
+  renderer: RendererElement;
   [key: string]: unknown;
 };
 type Entities = { [key: string]: Entity };
 type ScreenType = ScaledSize; // can't name just Screen because there's inbuilt type for that
-type Time = number;
-type Callback = (time?: Time) => void;
+type Callback = (time?: number) => void;
 
 type TouchEventType = "start" | "end" | "move" | "press" | "long-press";
 type TouchProcessorFinalReturn = ReturnType<
@@ -17,6 +17,13 @@ type TouchProcessorFinalReturn = ReturnType<
 >;
 type DispatchType = "started" | "stopped" | "swapped";
 type DispatchFunction = { type: DispatchType | string };
+
+interface TimeUpdate {
+  current: number;
+  delta: number;
+  previous: number;
+  previousDelta: number;
+}
 
 interface DetailedTouchEvent {
   event: NativeTouchEvent;
@@ -31,14 +38,20 @@ interface DetailedTouchEvent {
   };
 }
 
+type Renderer = (
+  entities: Entities,
+  screen: ScreenType,
+  layout: LayoutRectangle
+) => React.ReactNode;
+
 export {
   Renderer,
   Entity,
   Entities,
   ScreenType,
-  Time,
   Callback,
   DetailedTouchEvent,
   TouchProcessorFinalReturn,
   DispatchFunction,
+  TimeUpdate,
 };

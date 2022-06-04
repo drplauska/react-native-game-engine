@@ -2,7 +2,7 @@
 With thanks, https://github.com/FormidableLabs/react-game-kit/blob/master/src/native/utils/game-loop.js
 */
 
-import { Callback, Time } from "types";
+import { Callback } from "types";
 
 /*
 The MIT License (MIT)
@@ -16,7 +16,7 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-export default class DefaultTimer {
+class DefaultTimer {
   subscribers: Callback[];
   loopId: number | null;
 
@@ -25,7 +25,7 @@ export default class DefaultTimer {
     this.loopId = null;
   }
 
-  loop = (time?: Time) => {
+  loop = (time?: number) => {
     if (this.loopId) {
       this.subscribers.forEach((callback) => {
         callback(time);
@@ -58,3 +58,5 @@ export default class DefaultTimer {
     this.subscribers = this.subscribers.filter((s) => s !== callback);
   }
 }
+
+export default DefaultTimer;

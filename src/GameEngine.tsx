@@ -20,6 +20,7 @@ import type {
   Renderer,
   DispatchFunction,
   Entity,
+  TimeUpdate,
 } from "./types";
 import DefaultTouchProcessor from "./DefaultTouchProcessor";
 
@@ -54,14 +55,14 @@ const isPromise = (obj: any): obj is Promise<any> => {
 interface GameEngineProps {
   systems?: ((
     entities: Entities,
-    { touches, time }: { touches: DetailedTouchEvent[]; time: number }
-  ) => Entity)[];
+    { touches, time }: { touches: DetailedTouchEvent[]; time: TimeUpdate }
+  ) => Entities)[];
   entities?: Entities | Promise<Entities>;
   renderer?: Renderer;
   touchProcessor?: TouchProcessorFinalReturn;
-  timer?: DefaultTimer;
+  timer?: typeof DefaultTimer;
   running?: boolean;
-  onEvent?: ({ type }: { type: DispatchFunction }) => void;
+  onEvent?: ({ type }: DispatchFunction) => void;
   style?: StyleProp<ViewStyle>;
   children?: React.ReactNode;
 }
@@ -82,7 +83,18 @@ export default class GameEngine extends Component<
   events: DispatchFunction[];
   touchProcessor: TouchProcessorFinalReturn;
   layout: LayoutRectangle;
-  renderer: Renderer;
+
+  static defaultProps = {
+    systems: [],
+    entities: {},
+    renderer: DefaultRenderer,
+    touchProcessor: DefaultTouchProcessor({
+      triggerPressEventBefore: 200,
+      triggerLongPressEventAfter: 700,
+    }),
+    running: true,
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -159,17 +171,18 @@ export default class GameEngine extends Component<
   };
 
   publish = (e) => {
+    // unused
     this.dispatch(e);
   };
 
   publishEvent = (e) => {
+    // unused
     this.dispatch(e);
   };
 
   dispatch = (e: DispatchFunction) => {
     setTimeout(() => {
       this.events.push(e);
-      console.log("this.events.push", e);
       if (this.props.onEvent) {
         this.props.onEvent(e);
       }
@@ -177,6 +190,7 @@ export default class GameEngine extends Component<
   };
 
   dispatchEvent = (e) => {
+    // unused
     this.dispatch(e);
   };
 
@@ -196,7 +210,7 @@ export default class GameEngine extends Component<
     };
 
     const newState = this.props.systems.reduce(
-      (state, sys) => sys(state, args),
+      (result, sys) => sys(result, args),
       this.state.entities
     );
 
@@ -226,7 +240,6 @@ export default class GameEngine extends Component<
   };
 
   render() {
-    console.log("eventai: ", this.events);
     return (
       <View
         style={[css.container, this.props.style]}
@@ -249,16 +262,7 @@ export default class GameEngine extends Component<
   }
 }
 
-GameEngine.defaultProps = {
-  systems: [],
-  entities: {},
-  renderer: DefaultRenderer,
-  touchProcessor: DefaultTouchProcessor({
-    triggerPressEventBefore: 200,
-    triggerLongPressEventAfter: 700,
-  }),
-  running: true,
-};
+// GameEngine.
 
 const css = StyleSheet.create({
   container: {
