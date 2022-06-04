@@ -28,7 +28,7 @@ const DefaultTouchProcessor = ({
   return (touches: NativeTouchEvent[]) => {
     const touchStart = new Subject<NativeTouchEvent>().pipe(
       map((e) => ({ id: e.identifier, type: "start", event: e }))
-    ) as AnonymousSubject<NativeTouchEvent>;
+    );
     const touchMove = new Subject<NativeTouchEvent>().pipe(
       map((e) => ({ id: e.identifier, type: "move", event: e }))
     );
@@ -104,7 +104,6 @@ const DefaultTouchProcessor = ({
       ) {
         switch (type) {
           case "start":
-            console.log(touchStart.next);
             touchStart.next(event);
             break;
           case "move":
@@ -117,6 +116,11 @@ const DefaultTouchProcessor = ({
       },
       end() {
         subscriptions.forEach((x) => x.unsubscribe());
+        console.log(touchStart.unsubscribe);
+        console.log(touchMove.unsubscribe);
+        console.log(touchEnd.unsubscribe);
+        console.log(touchPress.unsubscribe);
+        console.log("-----");
         touchStart.unsubscribe();
         touchMove.unsubscribe();
         touchEnd.unsubscribe();
