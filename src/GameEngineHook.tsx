@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from "react";
+import React, { Component, useCallback, useEffect, useState } from "react";
 import {
   View,
   StyleSheet,
@@ -164,35 +164,38 @@ const GameEngine = (props: GameEngineProps) => {
     }, 0);
   };
 
-  const updateHandler = (currentTime: number) => {
-    if (!currentEntities) {
-      return;
-    }
-    const args = {
-      touches,
-      screen: screenSize,
-      layout,
-      events,
-      dispatch,
-      time: {
-        current: currentTime,
-        previous: previousTime,
-        delta: currentTime - (previousTime || currentTime),
-        previousDelta: previousDelta,
-      },
-    };
+  const updateHandler = useCallback(
+    (currentTime: number) => {
+      if (!currentEntities) {
+        return;
+      }
+      const args = {
+        touches,
+        screen: screenSize,
+        layout,
+        events,
+        dispatch,
+        time: {
+          current: currentTime,
+          previous: previousTime,
+          delta: currentTime - (previousTime || currentTime),
+          previousDelta: previousDelta,
+        },
+      };
 
-    const newEntities = systems.reduce(
-      (result, sys) => sys(result, args),
-      currentEntities
-    );
+      const newEntities = systems.reduce(
+        (result, sys) => sys(result, args),
+        currentEntities
+      );
 
-    setTouches([]);
-    setEvents([]);
-    setPreviousTime(currentTime);
-    setPreviousDelta(args.time.delta);
-    setCurrentEntities(newEntities);
-  };
+      setTouches([]);
+      setEvents([]);
+      setPreviousTime(currentTime);
+      setPreviousDelta(args.time.delta);
+      setCurrentEntities(newEntities);
+    },
+    [currentEntities, touches, screenSize, layout, events, dispatch]
+  );
 
   const onLayoutHandler = (e: LayoutChangeEvent) => {
     screenSize = Dimensions.get("window");
@@ -212,7 +215,7 @@ const GameEngine = (props: GameEngineProps) => {
     currentTouchProcessor.process("end", e.nativeEvent);
   };
 
-  if (!currentEntities || !layout) {
+  if (!currentEntities) {
     return null;
   }
 
@@ -224,7 +227,7 @@ const GameEngine = (props: GameEngineProps) => {
         onTouchMove={onTouchMoveHandler}
         onTouchEnd={onTouchEndHandler}
       >
-        {!!renderer && renderer(currentEntities, screenSize, layout)}
+        {!!layout && renderer(currentEntities, screenSize, layout)}
       </View>
 
       <View pointerEvents={"box-none"} style={StyleSheet.absoluteFill}>
