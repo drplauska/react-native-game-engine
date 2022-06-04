@@ -61,7 +61,7 @@ interface GameEngineProps {
   touchProcessor?: TouchProcessorFinalReturn;
   timer?: DefaultTimer;
   running?: boolean;
-  onEvent?: ({ type }: { type: DispatchFunction }) => void; //test
+  onEvent?: ({ type }: { type: DispatchFunction }) => void;
   style?: StyleProp<ViewStyle>;
   children?: React.ReactNode;
 }
@@ -169,7 +169,10 @@ export default class GameEngine extends Component<
   dispatch = (e: DispatchFunction) => {
     setTimeout(() => {
       this.events.push(e);
-      if (this.props.onEvent) this.props.onEvent(e);
+      console.log("this.events.push", e);
+      if (this.props.onEvent) {
+        this.props.onEvent(e);
+      }
     }, 0);
   };
 
@@ -223,6 +226,7 @@ export default class GameEngine extends Component<
   };
 
   render() {
+    console.log("eventai: ", this.events);
     return (
       <View
         style={[css.container, this.props.style]}
