@@ -5,7 +5,11 @@
     "module": "CommonJS",
     "strict": true,
     "noImplicitAny": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "declarationMap": true,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "declarationDir": "./dist"
   },
   "include": ["src/*"],
   "exclude": ["node_modules"]
