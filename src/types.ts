@@ -18,11 +18,13 @@ type TouchProcessorFinalReturn = ReturnType<
 type DispatchType = "started" | "stopped" | "swapped";
 type DispatchFunction = { type: DispatchType | string };
 
+type Optional<T> = T | null;
+
 interface TimeUpdate {
   current: number;
   delta: number;
-  previous: number | null;
-  previousDelta: number | null;
+  previous: Optional<number>;
+  previousDelta: Optional<number>;
 }
 
 interface DetailedTouchEvent {
@@ -62,4 +64,5 @@ export {
   TimeUpdate,
   TouchEventType,
   TouchProcessorOptions,
+  Optional,
 };

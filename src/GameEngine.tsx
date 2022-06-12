@@ -21,6 +21,7 @@ import type {
   DispatchFunction,
   Entity,
   TimeUpdate,
+  Optional,
 } from "./types";
 import DefaultTouchProcessor from "./DefaultTouchProcessor";
 
@@ -68,7 +69,7 @@ interface GameEngineProps {
 }
 
 interface GameEngineState {
-  entities: null | Entities;
+  entities: Optional<Entities>;
 }
 
 export default class GameEngine extends Component<
@@ -78,11 +79,11 @@ export default class GameEngine extends Component<
   timer: DefaultTimer;
   touches: NativeTouchEvent[];
   screen: ScaledSize;
-  previousTime: number | null;
-  previousDelta: number | null;
+  previousTime: Optional<number>;
+  previousDelta: Optional<number>;
   events: DispatchFunction[];
   touchProcessor: TouchProcessorFinalReturn;
-  layout: LayoutRectangle | null;
+  layout: Optional<LayoutRectangle>;
 
   static defaultProps = {
     systems: [],

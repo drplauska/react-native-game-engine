@@ -13,6 +13,7 @@ import {
 } from "react-native";
 import {
   DetailedTouchEvent,
+  Optional,
   TouchProcessorFinalReturn,
   TouchProcessorOptions,
 } from "types";
@@ -21,9 +22,9 @@ import DefaultTouchProcessor from "./DefaultTouchProcessor";
 
 type Time = {
   current: number;
-  previous: number | null;
+  previous: Optional<number>;
   delta: number;
-  previousDelta: number | null;
+  previousDelta: Optional<number>;
 };
 
 interface GameLoopProps {
@@ -38,7 +39,7 @@ interface GameLoopProps {
   }: {
     touches: NativeTouchEvent[];
     screen: ScaledSize;
-    layout: LayoutRectangle | null;
+    layout: Optional<LayoutRectangle>;
     time: Time;
   }) => void;
   children?: React.ReactNode;
@@ -49,10 +50,10 @@ export default class GameLoop extends Component<GameLoopProps> {
   timer: DefaultTimer;
   touches: NativeTouchEvent[];
   screen: ScaledSize;
-  previousTime: number | null;
-  previousDelta: number | null;
+  previousTime: Optional<number>;
+  previousDelta: Optional<number>;
   touchProcessor: TouchProcessorFinalReturn;
-  layout: LayoutRectangle | null;
+  layout: Optional<LayoutRectangle>;
 
   static defaultProps = {
     touchProcessor: DefaultTouchProcessor({
