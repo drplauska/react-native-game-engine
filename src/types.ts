@@ -2,9 +2,9 @@ import DefaultTouchProcessor from "./DefaultTouchProcessor";
 import { LayoutRectangle, NativeTouchEvent, ScaledSize } from "react-native";
 import React from "react";
 
-type RendererElement = React.ElementType | { type: React.ElementType };
+type RendererElement = React.ElementType | { type: React.ElementType }; // would RendererElement accept functional components?
 type Entity = {
-  renderer: RendererElement;
+  renderer: RendererElement; // should this be optional as some entities may not have a renderer? E.g. renderer?: RendererElement
   [key: string]: unknown;
 };
 type Entities = { [key: string]: Entity };
