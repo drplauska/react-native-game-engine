@@ -6,19 +6,15 @@ import DefaultTouchProcessor from "./DefaultTouchProcessor";
 
 type RendererElement = React.ElementType | { type: React.ElementType }; // would RendererElement accept functional components?
 
-type Entity<T = void> = T extends void
-  ? {
-      renderer?: RendererElement;
-      [key: string]: unknown;
-    }
+type Entity<OneTruth = void> = OneTruth extends void
+  ? { renderer?: RendererElement; [key: string]: unknown }
   : {
-      renderer?: RendererElement;
-      [key: string]: unknown;
-    } & {
-      [key: string]: T;
-    };
+      [key: string]: OneTruth[keyof OneTruth];
+    } & { renderer?: RendererElement };
 
-type Entities<OneTruth> = { [key: string]: Entity<OneTruth> };
+type Entities<OneTruth> = OneTruth extends void
+  ? { [key: string]: Entity }
+  : { [key: string]: Entity<OneTruth> };
 
 type EntitiesMaybePromise<OneTruth> =
   | Entities<OneTruth>

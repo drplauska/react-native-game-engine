@@ -20,6 +20,7 @@ import type {
   ScreenType,
   EntitiesMaybePromise,
   System,
+  Entity,
 } from "./types";
 import DefaultTouchProcessor from "./DefaultTouchProcessor";
 import type { Optional } from "./typeUtils";
@@ -70,7 +71,7 @@ interface GameEngineState<OneTruth> {
   entities: Entities<OneTruth> | null;
 }
 
-export default class GameEngine<OneTruth = void> extends Component<
+export default class GameEngine<OneTruth = Entity> extends Component<
   GameEngineProps<OneTruth>,
   GameEngineState<OneTruth>
 > {

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { StyleProp, ViewStyle, GestureResponderEvent, LayoutChangeEvent, LayoutRectangle } from "react-native";
 import DefaultTimer from "./DefaultTimer";
-import type { TouchProcessorFinalReturn, DetailedTouchEvent, Entities, Renderer, Event, ScreenType, EntitiesMaybePromise, System } from "./types";
+import type { TouchProcessorFinalReturn, DetailedTouchEvent, Entities, Renderer, Event, ScreenType, EntitiesMaybePromise, System, Entity } from "./types";
 import DefaultTouchProcessor from "./DefaultTouchProcessor";
 import type { Optional } from "./typeUtils";
 interface GameEngineProps<OneTruth> {
@@ -18,7 +18,7 @@ interface GameEngineProps<OneTruth> {
 interface GameEngineState<OneTruth> {
     entities: Entities<OneTruth> | null;
 }
-export default class GameEngine<OneTruth = void> extends Component<GameEngineProps<OneTruth>, GameEngineState<OneTruth>> {
+export default class GameEngine<OneTruth = Entity> extends Component<GameEngineProps<OneTruth>, GameEngineState<OneTruth>> {
     timer: DefaultTimer;
     touches: DetailedTouchEvent[];
     screen: ScreenType;

@@ -5,16 +5,17 @@ import DefaultTouchProcessor from "./DefaultTouchProcessor";
 declare type RendererElement = React.ElementType | {
     type: React.ElementType;
 };
-declare type Entity<T = void> = T extends void ? {
+declare type Entity<OneTruth = void> = OneTruth extends void ? {
     renderer?: RendererElement;
     [key: string]: unknown;
 } : {
-    renderer?: RendererElement;
-    [key: string]: unknown;
+    [key: string]: OneTruth[keyof OneTruth];
 } & {
-    [key: string]: T;
+    renderer?: RendererElement;
 };
-declare type Entities<OneTruth> = {
+declare type Entities<OneTruth> = OneTruth extends void ? {
+    [key: string]: Entity;
+} : {
     [key: string]: Entity<OneTruth>;
 };
 declare type EntitiesMaybePromise<OneTruth> = Entities<OneTruth> | Promise<Entities<OneTruth>>;
