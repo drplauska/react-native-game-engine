@@ -5,18 +5,14 @@ import DefaultTouchProcessor from "./DefaultTouchProcessor";
 declare type RendererElement = React.ElementType | {
     type: React.ElementType;
 };
-declare type Entity<OneTruth = void> = OneTruth extends void ? {
+declare type Entity = {
     renderer?: RendererElement;
     [key: string]: unknown;
-} : {
-    [key: string]: OneTruth[keyof OneTruth] | RendererElement;
 };
-declare type Entities<OneTruth> = OneTruth extends void ? {
+declare type Entities = {
     [key: string]: Entity;
-} : {
-    [key: string]: Entity<OneTruth>;
 };
-declare type EntitiesMaybePromise<OneTruth> = Entities<OneTruth> | Promise<Entities<OneTruth>>;
+declare type EntitiesMaybePromise = Entities | Promise<Entities>;
 declare type ScreenType = ScaledSize;
 declare type OnUpdateCallback = (time: number) => void;
 declare type TouchEventType = "start" | "end" | "move" | "press" | "long-press";
@@ -43,7 +39,7 @@ interface DetailedTouchEvent {
         timestamp: number;
     };
 }
-declare type Renderer<OneTruth> = (entities: Entities<OneTruth>, screen: ScreenType, layout: LayoutRectangle) => React.ReactNode;
+declare type Renderer = (entities: Entities, screen: ScreenType, layout: LayoutRectangle) => React.ReactNode;
 interface TouchProcessorOptions {
     triggerPressEventBefore: number;
     triggerLongPressEventAfter: number;
@@ -61,7 +57,7 @@ declare type GameLoopOnUpdate = {
     layout: Optional<LayoutRectangle>;
     time: Time;
 };
-declare type System<OneTruth> = (entities: Entities<OneTruth>, { touches, screen, time, layout, events, dispatch }: SystemParams) => Entities<OneTruth>;
+declare type System = (entities: Entities, { touches, screen, time, layout, events, dispatch }: SystemParams) => Entities;
 declare type SystemParams = {
     touches: DetailedTouchEvent[];
     time: TimeUpdate;
