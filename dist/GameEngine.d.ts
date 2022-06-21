@@ -1,18 +1,11 @@
 import React, { Component } from "react";
 import { StyleProp, ViewStyle, GestureResponderEvent, LayoutChangeEvent, LayoutRectangle } from "react-native";
 import DefaultTimer from "./DefaultTimer";
-import type { TouchProcessorFinalReturn, DetailedTouchEvent, Entities, Renderer, Event, TimeUpdate, ScreenType, EntitiesMaybePromise } from "./types";
+import type { TouchProcessorFinalReturn, DetailedTouchEvent, Entities, Renderer, Event, ScreenType, EntitiesMaybePromise, System } from "./types";
 import DefaultTouchProcessor from "./DefaultTouchProcessor";
 import type { Optional } from "./typeUtils";
 interface GameEngineProps {
-    systems: ((entities: Optional<Entities>, { touches, screen, time, layout, events, dispatch, }: {
-        touches: DetailedTouchEvent[];
-        time: TimeUpdate;
-        screen: ScreenType;
-        layout: Optional<LayoutRectangle>;
-        dispatch: (event: Event) => void;
-        events: Event[];
-    }) => Entities)[];
+    systems: System[];
     entities?: EntitiesMaybePromise;
     renderer?: Renderer;
     touchProcessor: ReturnType<typeof DefaultTouchProcessor>;

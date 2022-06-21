@@ -17,9 +17,9 @@ import type {
   Entities,
   Renderer,
   Event,
-  TimeUpdate,
   ScreenType,
   EntitiesMaybePromise,
+  System,
 } from "./types";
 import DefaultTouchProcessor from "./DefaultTouchProcessor";
 import type { Optional } from "./typeUtils";
@@ -55,24 +55,7 @@ const isPromise = (obj: any): obj is Promise<any> => {
 };
 
 interface GameEngineProps {
-  systems: ((
-    entities: Optional<Entities>,
-    {
-      touches,
-      screen,
-      time,
-      layout,
-      events,
-      dispatch,
-    }: {
-      touches: DetailedTouchEvent[];
-      time: TimeUpdate;
-      screen: ScreenType;
-      layout: Optional<LayoutRectangle>;
-      dispatch: (event: Event) => void;
-      events: Event[];
-    }
-  ) => Entities)[];
+  systems: System[];
   entities?: EntitiesMaybePromise;
   renderer?: Renderer;
   touchProcessor: ReturnType<typeof DefaultTouchProcessor>;

@@ -16,5 +16,5 @@
     "skipLibCheck": true // also noticed that running `npx tsc` will highlight a bunch of errors from node_modules
   },
   "include": ["./src/*"],
-  "exclude": ["./node_modules", "./src/DefaultTouchProcessor.ts"]
+  "exclude": ["./node_modules"]
 }
