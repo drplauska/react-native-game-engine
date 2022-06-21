@@ -67,7 +67,7 @@ interface GameEngineProps {
 }
 
 interface GameEngineState {
-  entities: Optional<Entities>;
+  entities: Entities;
 }
 
 export default class GameEngine extends Component<
@@ -97,7 +97,7 @@ export default class GameEngine extends Component<
   constructor(props: GameEngineProps) {
     super(props);
     this.state = {
-      entities: null,
+      entities: {},
     };
     this.timer = props.timer || new DefaultTimer();
     this.timer.subscribe(this.updateHandler);

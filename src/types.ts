@@ -72,7 +72,7 @@ type GameLoopOnUpdate = {
 };
 
 type System = (
-  entities: Optional<Entities>,
+  entities: Entities,
   { touches, screen, time, layout, events, dispatch }: SystemParams
 ) => Entities;
 

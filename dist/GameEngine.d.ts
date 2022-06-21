@@ -16,7 +16,7 @@ interface GameEngineProps {
     children?: React.ReactNode;
 }
 interface GameEngineState {
-    entities: Optional<Entities>;
+    entities: Entities;
 }
 export default class GameEngine extends Component<GameEngineProps, GameEngineState> {
     timer: DefaultTimer;

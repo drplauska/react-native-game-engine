@@ -57,7 +57,7 @@ declare type GameLoopOnUpdate = {
     layout: Optional<LayoutRectangle>;
     time: Time;
 };
-declare type System = (entities: Optional<Entities>, { touches, screen, time, layout, events, dispatch }: SystemParams) => Entities;
+declare type System = (entities: Entities, { touches, screen, time, layout, events, dispatch }: SystemParams) => Entities;
 declare type SystemParams = {
     touches: DetailedTouchEvent[];
     time: TimeUpdate;
