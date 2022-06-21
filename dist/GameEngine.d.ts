@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import { StyleProp, ViewStyle, GestureResponderEvent, LayoutChangeEvent, LayoutRectangle } from "react-native";
 import DefaultTimer from "./DefaultTimer";
-import type { TouchProcessorFinalReturn, DetailedTouchEvent, Entities, Renderer, Event, ScreenType, EntitiesMaybePromise, System, EmptyObject } from "./types";
+import type { TouchProcessorFinalReturn, DetailedTouchEvent, Entities, Renderer, Event, ScreenType, EntitiesMaybePromise, System } from "./types";
 import DefaultTouchProcessor from "./DefaultTouchProcessor";
 import type { Optional } from "./typeUtils";
-interface GameEngineProps<T = EmptyObject> {
-    systems: System[];
-    entities?: EntitiesMaybePromise<T>;
-    renderer?: Renderer;
+interface GameEngineProps<OneTruth> {
+    systems: System<OneTruth>[];
+    entities?: EntitiesMaybePromise<OneTruth>;
+    renderer?: Renderer<OneTruth>;
     touchProcessor: ReturnType<typeof DefaultTouchProcessor>;
     timer?: DefaultTimer;
     running?: boolean;
@@ -15,10 +15,10 @@ interface GameEngineProps<T = EmptyObject> {
     style?: StyleProp<ViewStyle>;
     children?: React.ReactNode;
 }
-interface GameEngineState {
-    entities: Entities;
+interface GameEngineState<OneTruth> {
+    entities: Entities<OneTruth> | null;
 }
-export default class GameEngine<T> extends Component<GameEngineProps<T>, GameEngineState> {
+export default class GameEngine<OneTruth = void> extends Component<GameEngineProps<OneTruth>, GameEngineState<OneTruth>> {
     timer: DefaultTimer;
     touches: DetailedTouchEvent[];
     screen: ScreenType;
@@ -30,21 +30,21 @@ export default class GameEngine<T> extends Component<GameEngineProps<T>, GameEng
     static defaultProps: {
         systems: never[];
         entities: {};
-        renderer: (entities: Entities<EmptyObject>, screen: import("react-native").ScaledSize, layout: LayoutRectangle) => (JSX.Element | null)[] | null;
+        renderer: <OneTruth_1>(entities: Entities<OneTruth_1>, screen: import("react-native").ScaledSize, layout: LayoutRectangle) => (JSX.Element | null)[] | null;
         touchProcessor: (touches: DetailedTouchEvent[]) => {
             process(type: import("./types").TouchEventType, event: import("react-native").NativeTouchEvent): void;
             end(): void;
         };
         running: boolean;
     };
-    constructor(props: GameEngineProps<T>);
+    constructor(props: GameEngineProps<OneTruth>);
     componentDidMount(): Promise<void>;
     componentWillUnmount(): void;
-    UNSAFE_componentWillReceiveProps(nextProps: GameEngineProps): void;
+    UNSAFE_componentWillReceiveProps(nextProps: GameEngineProps<OneTruth>): void;
     clear: () => void;
     start: () => void;
     stop: () => void;
-    swap: (newEntities: Entities) => Promise<void>;
+    swap: (newEntities: Entities<OneTruth>) => Promise<void>;
     dispatch: (e: Event) => void;
     updateHandler: (currentTime: number) => void;
     onLayoutHandler: (e: LayoutChangeEvent) => void;

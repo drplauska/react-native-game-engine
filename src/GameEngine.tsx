@@ -20,22 +20,21 @@ import type {
   ScreenType,
   EntitiesMaybePromise,
   System,
-  EmptyObject,
 } from "./types";
 import DefaultTouchProcessor from "./DefaultTouchProcessor";
 import type { Optional } from "./typeUtils";
 
-interface PropsForEntities {
-  initState?: EntitiesMaybePromise;
-  initialState?: EntitiesMaybePromise;
-  state?: EntitiesMaybePromise;
-  initEntities?: EntitiesMaybePromise;
-  initialEntities?: EntitiesMaybePromise;
-  entities?: EntitiesMaybePromise;
+interface PropsForEntities<OneTruth> {
+  initState?: EntitiesMaybePromise<OneTruth>;
+  initialState?: EntitiesMaybePromise<OneTruth>;
+  state?: EntitiesMaybePromise<OneTruth>;
+  initEntities?: EntitiesMaybePromise<OneTruth>;
+  initialEntities?: EntitiesMaybePromise<OneTruth>;
+  entities?: EntitiesMaybePromise<OneTruth>;
 }
 
-const getEntitiesFromProps = (
-  props: PropsForEntities // TODO: this function may need some decisions whether to leave it with some many options
+const getEntitiesFromProps = <OneTruth,>(
+  props: PropsForEntities<OneTruth> // TODO: this function may need some decisions whether to leave it with some many options
 ) =>
   props.initState ||
   props.initialState ||
@@ -55,10 +54,10 @@ const isPromise = (obj: any): obj is Promise<any> => {
   );
 };
 
-interface GameEngineProps<T = EmptyObject> {
-  systems: System[];
-  entities?: EntitiesMaybePromise<T>;
-  renderer?: Renderer;
+interface GameEngineProps<OneTruth> {
+  systems: System<OneTruth>[];
+  entities?: EntitiesMaybePromise<OneTruth>;
+  renderer?: Renderer<OneTruth>;
   touchProcessor: ReturnType<typeof DefaultTouchProcessor>;
   timer?: DefaultTimer;
   running?: boolean;
@@ -67,13 +66,13 @@ interface GameEngineProps<T = EmptyObject> {
   children?: React.ReactNode;
 }
 
-interface GameEngineState {
-  entities: Entities;
+interface GameEngineState<OneTruth> {
+  entities: Entities<OneTruth> | null;
 }
 
-export default class GameEngine<T> extends Component<
-  GameEngineProps<T>,
-  GameEngineState
+export default class GameEngine<OneTruth = void> extends Component<
+  GameEngineProps<OneTruth>,
+  GameEngineState<OneTruth>
 > {
   timer: DefaultTimer;
   touches: DetailedTouchEvent[];
@@ -95,10 +94,10 @@ export default class GameEngine<T> extends Component<
     running: true,
   };
 
-  constructor(props: GameEngineProps<T>) {
+  constructor(props: GameEngineProps<OneTruth>) {
     super(props);
     this.state = {
-      entities: {},
+      entities: null,
     };
     this.timer = props.timer || new DefaultTimer();
     this.timer.subscribe(this.updateHandler);
@@ -120,7 +119,7 @@ export default class GameEngine<T> extends Component<
 
     this.setState(
       {
-        entities: entities || {},
+        entities: entities || null,
       },
       () => {
         if (this.props.running) this.start();
@@ -136,7 +135,7 @@ export default class GameEngine<T> extends Component<
     }
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps: GameEngineProps) {
+  UNSAFE_componentWillReceiveProps(nextProps: GameEngineProps<OneTruth>) {
     if (nextProps.running !== this.props.running) {
       if (nextProps.running) {
         this.start();
@@ -164,7 +163,7 @@ export default class GameEngine<T> extends Component<
     this.dispatch({ type: "stopped" });
   };
 
-  swap = async (newEntities: Entities) => {
+  swap = async (newEntities: Entities<OneTruth>) => {
     if (isPromise(newEntities)) {
       newEntities = await newEntities;
     }

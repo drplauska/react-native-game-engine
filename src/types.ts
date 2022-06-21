@@ -6,14 +6,16 @@ import DefaultTouchProcessor from "./DefaultTouchProcessor";
 
 type RendererElement = React.ElementType | { type: React.ElementType }; // would RendererElement accept functional components?
 
-type EmptyObject = Record<string, unknown>;
-
 type Entity = {
   renderer?: RendererElement;
   [key: string]: unknown;
 };
-type Entities<T = EmptyObject> = { [key: string]: Entity } & T;
-type EntitiesMaybePromise<T = EmptyObject> = Entities<T> | Promise<Entities<T>>;
+type Entities<OneTruth> = OneTruth extends void
+  ? { [key: string]: Entity }
+  : { [key: string]: Entity } & OneTruth;
+type EntitiesMaybePromise<OneTruth> =
+  | Entities<OneTruth>
+  | Promise<Entities<OneTruth>>;
 
 type ScreenType = ScaledSize;
 
@@ -47,8 +49,8 @@ interface DetailedTouchEvent {
   };
 }
 
-type Renderer = (
-  entities: Entities,
+type Renderer<OneTruth> = (
+  entities: Entities<OneTruth>,
   screen: ScreenType,
   layout: LayoutRectangle
 ) => React.ReactNode;
@@ -73,10 +75,10 @@ type GameLoopOnUpdate = {
   time: Time;
 };
 
-type System<T = EmptyObject> = (
-  entities: Entities<T>,
+type System<OneTruth> = (
+  entities: Entities<OneTruth>,
   { touches, screen, time, layout, events, dispatch }: SystemParams
-) => Entities<T>;
+) => Entities<OneTruth>;
 
 type SystemParams = {
   touches: DetailedTouchEvent[];
@@ -104,5 +106,4 @@ export {
   GameLoopOnUpdate,
   System,
   SystemParams,
-  EmptyObject,
 };

@@ -5,15 +5,16 @@ import DefaultTouchProcessor from "./DefaultTouchProcessor";
 declare type RendererElement = React.ElementType | {
     type: React.ElementType;
 };
-declare type EmptyObject = Record<string, unknown>;
 declare type Entity = {
     renderer?: RendererElement;
     [key: string]: unknown;
 };
-declare type Entities<T = EmptyObject> = {
+declare type Entities<OneTruth> = OneTruth extends void ? {
     [key: string]: Entity;
-} & T;
-declare type EntitiesMaybePromise<T = EmptyObject> = Entities<T> | Promise<Entities<T>>;
+} : {
+    [key: string]: Entity;
+} & OneTruth;
+declare type EntitiesMaybePromise<OneTruth> = Entities<OneTruth> | Promise<Entities<OneTruth>>;
 declare type ScreenType = ScaledSize;
 declare type OnUpdateCallback = (time: number) => void;
 declare type TouchEventType = "start" | "end" | "move" | "press" | "long-press";
@@ -40,7 +41,7 @@ interface DetailedTouchEvent {
         timestamp: number;
     };
 }
-declare type Renderer = (entities: Entities, screen: ScreenType, layout: LayoutRectangle) => React.ReactNode;
+declare type Renderer<OneTruth> = (entities: Entities<OneTruth>, screen: ScreenType, layout: LayoutRectangle) => React.ReactNode;
 interface TouchProcessorOptions {
     triggerPressEventBefore: number;
     triggerLongPressEventAfter: number;
@@ -58,7 +59,7 @@ declare type GameLoopOnUpdate = {
     layout: Optional<LayoutRectangle>;
     time: Time;
 };
-declare type System<T = EmptyObject> = (entities: Entities<T>, { touches, screen, time, layout, events, dispatch }: SystemParams) => Entities<T>;
+declare type System<OneTruth> = (entities: Entities<OneTruth>, { touches, screen, time, layout, events, dispatch }: SystemParams) => Entities<OneTruth>;
 declare type SystemParams = {
     touches: DetailedTouchEvent[];
     time: TimeUpdate;
@@ -67,5 +68,5 @@ declare type SystemParams = {
     dispatch: (event: Event) => void;
     events: Event[];
 };
-export { Renderer, Entity, Entities, ScreenType, OnUpdateCallback, DetailedTouchEvent, TouchProcessorFinalReturn, Event, TimeUpdate, TouchEventType, TouchProcessorOptions, EntitiesMaybePromise, Time, GameLoopOnUpdate, System, SystemParams, EmptyObject, };
+export { Renderer, Entity, Entities, ScreenType, OnUpdateCallback, DetailedTouchEvent, TouchProcessorFinalReturn, Event, TimeUpdate, TouchEventType, TouchProcessorOptions, EntitiesMaybePromise, Time, GameLoopOnUpdate, System, SystemParams, };
 //# sourceMappingURL=types.d.ts.map
