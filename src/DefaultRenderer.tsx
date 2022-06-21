@@ -5,8 +5,8 @@ import type { Entity, Entities, ScreenType } from "./types";
 
 const isEntityRenderable = (entity: Entity) => !!entity.renderer;
 
-export default <OneTruth,>(
-  entities: Entities<OneTruth>,
+export default (
+  entities: Entities,
   screen: ScreenType,
   layout: LayoutRectangle
 ) => {
