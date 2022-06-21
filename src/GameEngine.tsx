@@ -20,7 +20,6 @@ import type {
   ScreenType,
   EntitiesMaybePromise,
   System,
-  Entity,
 } from "./types";
 import DefaultTouchProcessor from "./DefaultTouchProcessor";
 import type { Optional } from "./typeUtils";
@@ -248,6 +247,17 @@ export default class GameEngine extends Component<
   };
 
   render() {
+    if (this.props.renderer && this.state.entities && this.layout) {
+      console.log({
+        entities: this.state.entities,
+        screen: this.screen,
+        layout: this.layout,
+      });
+      console.log(
+        this.props.renderer(this.state.entities, this.screen, this.layout)
+      );
+      console.log("-------");
+    }
     return (
       <View
         style={[css.container, this.props.style]}

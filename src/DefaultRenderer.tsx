@@ -5,7 +5,7 @@ import type { Entity, Entities, ScreenType } from "./types";
 
 const isEntityRenderable = (entity: Entity) => !!entity.renderer;
 
-export default (
+const DefaultRenderer = (
   entities: Entities,
   screen: ScreenType,
   layout: LayoutRectangle
@@ -42,3 +42,5 @@ export default (
 
   return entitiesToRender;
 };
+
+export default DefaultRenderer;
