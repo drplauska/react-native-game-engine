@@ -73,7 +73,7 @@ type GameLoopOnUpdate = {
   time: Time;
 };
 
-type System = <T>(
+type System<T = EmptyObject> = (
   entities: Entities<T>,
   { touches, screen, time, layout, events, dispatch }: SystemParams
 ) => Entities<T>;
