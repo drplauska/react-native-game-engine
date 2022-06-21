@@ -9,8 +9,8 @@ type RendererElement = React.ElementType | { type: React.ElementType }; // would
 type Entity<OneTruth = void> = OneTruth extends void
   ? { renderer?: RendererElement; [key: string]: unknown }
   : {
-      [key: string]: OneTruth[keyof OneTruth];
-    } & { renderer?: RendererElement };
+      [key: string]: OneTruth[keyof OneTruth] | RendererElement;
+    };
 
 type Entities<OneTruth> = OneTruth extends void
   ? { [key: string]: Entity }

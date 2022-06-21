@@ -9,9 +9,7 @@ declare type Entity<OneTruth = void> = OneTruth extends void ? {
     renderer?: RendererElement;
     [key: string]: unknown;
 } : {
-    [key: string]: OneTruth[keyof OneTruth];
-} & {
-    renderer?: RendererElement;
+    [key: string]: OneTruth[keyof OneTruth] | RendererElement;
 };
 declare type Entities<OneTruth> = OneTruth extends void ? {
     [key: string]: Entity;
