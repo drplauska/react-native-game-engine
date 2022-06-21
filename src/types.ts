@@ -73,22 +73,17 @@ type GameLoopOnUpdate = {
 
 type System = (
   entities: Optional<Entities>,
-  {
-    touches,
-    screen,
-    time,
-    layout,
-    events,
-    dispatch,
-  }: {
-    touches: DetailedTouchEvent[];
-    time: TimeUpdate;
-    screen: ScreenType;
-    layout: Optional<LayoutRectangle>;
-    dispatch: (event: Event) => void;
-    events: Event[];
-  }
+  { touches, screen, time, layout, events, dispatch }: SystemParams
 ) => Entities;
+
+type SystemParams = {
+  touches: DetailedTouchEvent[];
+  time: TimeUpdate;
+  screen: ScreenType;
+  layout: Optional<LayoutRectangle>;
+  dispatch: (event: Event) => void;
+  events: Event[];
+};
 
 export {
   Renderer,
@@ -106,4 +101,5 @@ export {
   Time,
   GameLoopOnUpdate,
   System,
+  SystemParams,
 };
