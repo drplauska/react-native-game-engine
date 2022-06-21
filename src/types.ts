@@ -1,26 +1,29 @@
 import React from "react";
 import { LayoutRectangle, NativeTouchEvent, ScaledSize } from "react-native";
+import type { Optional } from "typeUtils";
 
 import DefaultTouchProcessor from "./DefaultTouchProcessor";
 
 type RendererElement = React.ElementType | { type: React.ElementType }; // would RendererElement accept functional components?
+
 type Entity = {
   renderer?: RendererElement;
   [key: string]: unknown;
 };
 type Entities = { [key: string]: Entity };
 type EntitiesMaybePromise = Entities | Promise<Entities>;
-type ScreenType = ScaledSize; // can't name just Screen because there's inbuilt type for that
+
+type ScreenType = ScaledSize;
+
 type OnUpdateCallback = (time: number) => void;
 
 type TouchEventType = "start" | "end" | "move" | "press" | "long-press";
+
 type TouchProcessorFinalReturn = ReturnType<
   ReturnType<typeof DefaultTouchProcessor>
 >;
 type DispatchType = "started" | "stopped" | "swapped";
 type Event = { type: DispatchType | string };
-
-type Optional<T> = T | null;
 
 interface TimeUpdate {
   current: number;
@@ -54,6 +57,20 @@ interface TouchProcessorOptions {
   moveThreshold: number;
 }
 
+type Time = {
+  current: number;
+  previous: Optional<number>;
+  delta: number;
+  previousDelta: Optional<number>;
+};
+
+type GameLoopOnUpdate = {
+  touches: DetailedTouchEvent[];
+  screen: ScreenType;
+  layout: Optional<LayoutRectangle>;
+  time: Time;
+};
+
 export {
   Renderer,
   Entity,
@@ -66,6 +83,7 @@ export {
   TimeUpdate,
   TouchEventType,
   TouchProcessorOptions,
-  Optional,
   EntitiesMaybePromise,
+  Time,
+  GameLoopOnUpdate,
 };

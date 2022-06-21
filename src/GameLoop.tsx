@@ -9,28 +9,15 @@ import {
   StyleProp,
   ViewStyle,
 } from "react-native";
-import {
+import type {
   DetailedTouchEvent,
-  Optional,
+  GameLoopOnUpdate,
   ScreenType,
   TouchProcessorFinalReturn,
 } from "types";
+import type { Optional } from "typeUtils";
 import DefaultTimer from "./DefaultTimer";
 import DefaultTouchProcessor from "./DefaultTouchProcessor";
-
-type Time = {
-  current: number;
-  previous: Optional<number>;
-  delta: number;
-  previousDelta: Optional<number>;
-};
-
-type GameLoopOnUpdate = {
-  touches: DetailedTouchEvent[];
-  screen: ScreenType;
-  layout: Optional<LayoutRectangle>;
-  time: Time;
-};
 
 interface GameLoopProps {
   timer?: DefaultTimer;

@@ -18,11 +18,11 @@ import type {
   Renderer,
   Event,
   TimeUpdate,
-  Optional,
   ScreenType,
   EntitiesMaybePromise,
 } from "./types";
 import DefaultTouchProcessor from "./DefaultTouchProcessor";
+import type { Optional } from "typeUtils";
 
 interface PropsForEntities {
   initState?: EntitiesMaybePromise;
