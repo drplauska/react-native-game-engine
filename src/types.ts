@@ -12,6 +12,8 @@ type Entity = {
 };
 type Entities<OneTruth> = OneTruth extends void
   ? { [key: string]: Entity }
+  : OneTruth extends Record<string, unknown>
+  ? { [key: string]: Entity } & OneTruth[string]
   : { [key: string]: Entity } & OneTruth;
 type EntitiesMaybePromise<OneTruth> =
   | Entities<OneTruth>
