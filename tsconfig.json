@@ -8,6 +8,9 @@
     "noImplicitAny": true,
     "esModuleInterop": true,
     "jsx": "react-native",
+    "emitDeclarationOnly": true,
+    "declaration": true,
+    "declarationMap": true,
     // what do you think of the options below?
     // "noEmit": true, // I noticed that running `npx tsc` will generate .js files so we want this?
     "skipLibCheck": true // also noticed that running `npx tsc` will highlight a bunch of errors from node_modules

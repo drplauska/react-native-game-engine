@@ -1,3 +1,6 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+
 import { NativeTouchEvent, GestureResponderEvent } from "react-native";
 import { Subject, of, merge, EMPTY } from "rxjs";
 import {
