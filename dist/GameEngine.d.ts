@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import { StyleProp, ViewStyle, GestureResponderEvent, LayoutChangeEvent, LayoutRectangle } from "react-native";
 import DefaultTimer from "./DefaultTimer";
-import type { TouchProcessorFinalReturn, DetailedTouchEvent, Entities, Renderer, Event, ScreenType, EntitiesMaybePromise, System } from "./types";
+import type { TouchProcessorFinalReturn, DetailedTouchEvent, Entities, Renderer, Event, ScreenType, EntitiesMaybePromise, System, EmptyObject } from "./types";
 import DefaultTouchProcessor from "./DefaultTouchProcessor";
 import type { Optional } from "./typeUtils";
-interface GameEngineProps {
+interface GameEngineProps<T = EmptyObject> {
     systems: System[];
-    entities?: EntitiesMaybePromise;
+    entities?: EntitiesMaybePromise<T>;
     renderer?: Renderer;
     touchProcessor: ReturnType<typeof DefaultTouchProcessor>;
     timer?: DefaultTimer;
@@ -18,7 +18,7 @@ interface GameEngineProps {
 interface GameEngineState {
     entities: Entities;
 }
-export default class GameEngine extends Component<GameEngineProps, GameEngineState> {
+export default class GameEngine<T> extends Component<GameEngineProps<T>, GameEngineState> {
     timer: DefaultTimer;
     touches: DetailedTouchEvent[];
     screen: ScreenType;
@@ -30,14 +30,14 @@ export default class GameEngine extends Component<GameEngineProps, GameEngineSta
     static defaultProps: {
         systems: never[];
         entities: {};
-        renderer: (entities: Entities, screen: import("react-native").ScaledSize, layout: LayoutRectangle) => (JSX.Element | null)[] | null;
+        renderer: (entities: Entities<EmptyObject>, screen: import("react-native").ScaledSize, layout: LayoutRectangle) => (JSX.Element | null)[] | null;
         touchProcessor: (touches: DetailedTouchEvent[]) => {
             process(type: import("./types").TouchEventType, event: import("react-native").NativeTouchEvent): void;
             end(): void;
         };
         running: boolean;
     };
-    constructor(props: GameEngineProps);
+    constructor(props: GameEngineProps<T>);
     componentDidMount(): Promise<void>;
     componentWillUnmount(): void;
     UNSAFE_componentWillReceiveProps(nextProps: GameEngineProps): void;

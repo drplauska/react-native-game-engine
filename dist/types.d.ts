@@ -5,14 +5,15 @@ import DefaultTouchProcessor from "./DefaultTouchProcessor";
 declare type RendererElement = React.ElementType | {
     type: React.ElementType;
 };
+declare type EmptyObject = Record<string, unknown>;
 declare type Entity = {
     renderer?: RendererElement;
     [key: string]: unknown;
 };
-declare type Entities = {
+declare type Entities<T = EmptyObject> = {
     [key: string]: Entity;
-};
-declare type EntitiesMaybePromise = Entities | Promise<Entities>;
+} & T;
+declare type EntitiesMaybePromise<T = EmptyObject> = Entities<T> | Promise<Entities<T>>;
 declare type ScreenType = ScaledSize;
 declare type OnUpdateCallback = (time: number) => void;
 declare type TouchEventType = "start" | "end" | "move" | "press" | "long-press";
@@ -66,5 +67,5 @@ declare type SystemParams = {
     dispatch: (event: Event) => void;
     events: Event[];
 };
-export { Renderer, Entity, Entities, ScreenType, OnUpdateCallback, DetailedTouchEvent, TouchProcessorFinalReturn, Event, TimeUpdate, TouchEventType, TouchProcessorOptions, EntitiesMaybePromise, Time, GameLoopOnUpdate, System, SystemParams, };
+export { Renderer, Entity, Entities, ScreenType, OnUpdateCallback, DetailedTouchEvent, TouchProcessorFinalReturn, Event, TimeUpdate, TouchEventType, TouchProcessorOptions, EntitiesMaybePromise, Time, GameLoopOnUpdate, System, SystemParams, EmptyObject, };
 //# sourceMappingURL=types.d.ts.map
