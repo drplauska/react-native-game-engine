@@ -199,6 +199,9 @@ export default class GameEngine extends Component<
   // };
 
   updateHandler = (currentTime: number) => {
+    if (!this.state.entities) {
+      return;
+    }
     const args = {
       touches: this.touches,
       screen: this.screen,

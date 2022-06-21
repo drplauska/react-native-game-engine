@@ -57,13 +57,14 @@ declare type GameLoopOnUpdate = {
     layout: Optional<LayoutRectangle>;
     time: Time;
 };
-declare type System = (entities: Optional<Entities>, { touches, screen, time, layout, events, dispatch, }: {
+declare type System = (entities: Optional<Entities>, { touches, screen, time, layout, events, dispatch }: SystemParams) => Entities;
+declare type SystemParams = {
     touches: DetailedTouchEvent[];
     time: TimeUpdate;
     screen: ScreenType;
     layout: Optional<LayoutRectangle>;
     dispatch: (event: Event) => void;
     events: Event[];
-}) => Entities;
-export { Renderer, Entity, Entities, ScreenType, OnUpdateCallback, DetailedTouchEvent, TouchProcessorFinalReturn, Event, TimeUpdate, TouchEventType, TouchProcessorOptions, EntitiesMaybePromise, Time, GameLoopOnUpdate, System, };
+};
+export { Renderer, Entity, Entities, ScreenType, OnUpdateCallback, DetailedTouchEvent, TouchProcessorFinalReturn, Event, TimeUpdate, TouchEventType, TouchProcessorOptions, EntitiesMaybePromise, Time, GameLoopOnUpdate, System, SystemParams, };
 //# sourceMappingURL=types.d.ts.map
