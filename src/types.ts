@@ -1,13 +1,15 @@
-import DefaultTouchProcessor from "./DefaultTouchProcessor";
-import { LayoutRectangle, NativeTouchEvent, ScaledSize } from "react-native";
 import React from "react";
+import { LayoutRectangle, NativeTouchEvent, ScaledSize } from "react-native";
+
+import DefaultTouchProcessor from "./DefaultTouchProcessor";
 
 type RendererElement = React.ElementType | { type: React.ElementType }; // would RendererElement accept functional components?
 type Entity = {
-  renderer: RendererElement; // should this be optional as some entities may not have a renderer? E.g. renderer?: RendererElement
+  renderer?: RendererElement;
   [key: string]: unknown;
 };
 type Entities = { [key: string]: Entity };
+type EntitiesMaybePromise = Entities | Promise<Entities>;
 type ScreenType = ScaledSize; // can't name just Screen because there's inbuilt type for that
 type OnUpdateCallback = (time: number) => void;
 
@@ -16,7 +18,7 @@ type TouchProcessorFinalReturn = ReturnType<
   ReturnType<typeof DefaultTouchProcessor>
 >;
 type DispatchType = "started" | "stopped" | "swapped";
-type DispatchFunction = { type: DispatchType | string };
+type Event = { type: DispatchType | string };
 
 type Optional<T> = T | null;
 
@@ -60,9 +62,10 @@ export {
   OnUpdateCallback,
   DetailedTouchEvent,
   TouchProcessorFinalReturn,
-  DispatchFunction,
+  Event,
   TimeUpdate,
   TouchEventType,
   TouchProcessorOptions,
   Optional,
+  EntitiesMaybePromise,
 };

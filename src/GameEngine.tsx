@@ -3,12 +3,10 @@ import {
   View,
   StyleSheet,
   Dimensions,
-  ScaledSize,
   StyleProp,
   ViewStyle,
   GestureResponderEvent,
   LayoutChangeEvent,
-  NativeTouchEvent,
   LayoutRectangle,
 } from "react-native";
 import DefaultTimer from "./DefaultTimer";
@@ -18,23 +16,26 @@ import type {
   DetailedTouchEvent,
   Entities,
   Renderer,
-  DispatchFunction,
-  Entity,
+  Event,
   TimeUpdate,
   Optional,
+  ScreenType,
+  EntitiesMaybePromise,
 } from "./types";
 import DefaultTouchProcessor from "./DefaultTouchProcessor";
 
 interface PropsForEntities {
-  initState?: any;
-  initialState?: any;
-  state?: any;
-  initEntities?: any;
-  initialEntities?: any;
-  entities?: any;
+  initState?: EntitiesMaybePromise;
+  initialState?: EntitiesMaybePromise;
+  state?: EntitiesMaybePromise;
+  initEntities?: EntitiesMaybePromise;
+  initialEntities?: EntitiesMaybePromise;
+  entities?: EntitiesMaybePromise;
 }
 
-const getEntitiesFromProps = (props: PropsForEntities) =>
+const getEntitiesFromProps = (
+  props: PropsForEntities // TODO: this function may need some decisions whether to leave it with some many options
+) =>
   props.initState ||
   props.initialState ||
   props.state ||
@@ -55,15 +56,29 @@ const isPromise = (obj: any): obj is Promise<any> => {
 
 interface GameEngineProps {
   systems: ((
-    entities: Entities,
-    { touches, time }: { touches: DetailedTouchEvent[]; time: TimeUpdate }
+    entities: Optional<Entities>,
+    {
+      touches,
+      screen,
+      time,
+      layout,
+      events,
+      dispatch,
+    }: {
+      touches: DetailedTouchEvent[];
+      time: TimeUpdate;
+      screen: ScreenType;
+      layout: Optional<LayoutRectangle>;
+      dispatch: (event: Event) => void;
+      events: Event[];
+    }
   ) => Entities)[];
-  entities?: Entities | Promise<Entities>;
+  entities?: EntitiesMaybePromise;
   renderer?: Renderer;
   touchProcessor: ReturnType<typeof DefaultTouchProcessor>;
   timer?: DefaultTimer;
   running?: boolean;
-  onEvent?: ({ type }: DispatchFunction) => void;
+  onEvent?: (e: Event) => void;
   style?: StyleProp<ViewStyle>;
   children?: React.ReactNode;
 }
@@ -77,11 +92,11 @@ export default class GameEngine extends Component<
   GameEngineState
 > {
   timer: DefaultTimer;
-  touches: NativeTouchEvent[];
-  screen: ScaledSize;
+  touches: DetailedTouchEvent[];
+  screen: ScreenType;
   previousTime: Optional<number>;
   previousDelta: Optional<number>;
-  events: DispatchFunction[];
+  events: Event[];
   touchProcessor: TouchProcessorFinalReturn;
   layout: Optional<LayoutRectangle>;
 
@@ -139,8 +154,11 @@ export default class GameEngine extends Component<
 
   UNSAFE_componentWillReceiveProps(nextProps: GameEngineProps) {
     if (nextProps.running !== this.props.running) {
-      if (nextProps.running) this.start();
-      else this.stop();
+      if (nextProps.running) {
+        this.start();
+      } else {
+        this.stop();
+      }
     }
   }
 
@@ -173,17 +191,17 @@ export default class GameEngine extends Component<
     });
   };
 
-  publish = (e) => {
-    // unused
-    this.dispatch(e);
-  };
+  // publish = (e) => {
+  //   // unused
+  //   this.dispatch(e);
+  // };
 
-  publishEvent = (e) => {
-    // unused
-    this.dispatch(e);
-  };
+  // publishEvent = (e) => {
+  //   // unused
+  //   this.dispatch(e);
+  // };
 
-  dispatch = (e: DispatchFunction) => {
+  dispatch = (e: Event) => {
     setTimeout(() => {
       this.events.push(e);
       if (this.props.onEvent) {
@@ -192,10 +210,10 @@ export default class GameEngine extends Component<
     }, 0);
   };
 
-  dispatchEvent = (e) => {
-    // unused
-    this.dispatch(e);
-  };
+  // dispatchEvent = (e) => {
+  //   // unused
+  //   this.dispatch(e);
+  // };
 
   updateHandler = (currentTime: number) => {
     const args = {
@@ -255,6 +273,8 @@ export default class GameEngine extends Component<
           onTouchEnd={this.onTouchEndHandler}
         >
           {!!this.props.renderer &&
+            this.state.entities &&
+            this.layout &&
             this.props.renderer(this.state.entities, this.screen, this.layout)}
         </View>
 

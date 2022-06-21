@@ -3,9 +3,7 @@ import {
   View,
   StyleSheet,
   Dimensions,
-  ScaledSize,
   LayoutRectangle,
-  NativeTouchEvent,
   LayoutChangeEvent,
   GestureResponderEvent,
   StyleProp,
@@ -14,8 +12,8 @@ import {
 import {
   DetailedTouchEvent,
   Optional,
+  ScreenType,
   TouchProcessorFinalReturn,
-  TouchProcessorOptions,
 } from "types";
 import DefaultTimer from "./DefaultTimer";
 import DefaultTouchProcessor from "./DefaultTouchProcessor";
@@ -27,29 +25,26 @@ type Time = {
   previousDelta: Optional<number>;
 };
 
+type GameLoopOnUpdate = {
+  touches: DetailedTouchEvent[];
+  screen: ScreenType;
+  layout: Optional<LayoutRectangle>;
+  time: Time;
+};
+
 interface GameLoopProps {
   timer?: DefaultTimer;
   touchProcessor: ReturnType<typeof DefaultTouchProcessor>;
   running: boolean;
-  onUpdate: ({
-    touches,
-    screen,
-    layout,
-    time,
-  }: {
-    touches: NativeTouchEvent[];
-    screen: ScaledSize;
-    layout: Optional<LayoutRectangle>;
-    time: Time;
-  }) => void;
+  onUpdate: ({ touches, screen, layout, time }: GameLoopOnUpdate) => void;
   children?: React.ReactNode;
   style?: StyleProp<ViewStyle>;
 }
 
 export default class GameLoop extends Component<GameLoopProps> {
   timer: DefaultTimer;
-  touches: NativeTouchEvent[];
-  screen: ScaledSize;
+  touches: DetailedTouchEvent[];
+  screen: ScreenType;
   previousTime: Optional<number>;
   previousDelta: Optional<number>;
   touchProcessor: TouchProcessorFinalReturn;

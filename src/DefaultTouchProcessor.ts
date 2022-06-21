@@ -11,7 +11,7 @@ import {
   filter,
   pairwise,
 } from "rxjs/operators";
-import { TouchEventType } from "types";
+import { DetailedTouchEvent, TouchEventType } from "types";
 
 interface DefaultTouchProcessorProps {
   triggerPressEventBefore?: number;
@@ -24,7 +24,7 @@ const DefaultTouchProcessor = ({
   triggerLongPressEventAfter = 700,
   moveThreshold = 0,
 }: DefaultTouchProcessorProps) => {
-  return (touches: NativeTouchEvent[]) => {
+  return (touches: DetailedTouchEvent[]) => {
     const touchStart = new Subject<NativeTouchEvent>().pipe(
       map((e) => ({ id: e.identifier, type: "start", event: e }))
     );
