@@ -22,7 +22,7 @@ import type {
   EntitiesMaybePromise,
 } from "./types";
 import DefaultTouchProcessor from "./DefaultTouchProcessor";
-import type { Optional } from "typeUtils";
+import type { Optional } from "./typeUtils";
 
 interface PropsForEntities {
   initState?: EntitiesMaybePromise;

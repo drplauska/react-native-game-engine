@@ -1,6 +1,6 @@
 import React from "react";
 import { LayoutRectangle, NativeTouchEvent, ScaledSize } from "react-native";
-import type { Optional } from "typeUtils";
+import type { Optional } from "./typeUtils";
 
 import DefaultTouchProcessor from "./DefaultTouchProcessor";
 

@@ -11,7 +11,7 @@ import {
   filter,
   pairwise,
 } from "rxjs/operators";
-import { DetailedTouchEvent, TouchEventType } from "types";
+import { DetailedTouchEvent, TouchEventType } from "./types";
 
 interface DefaultTouchProcessorProps {
   triggerPressEventBefore?: number;

@@ -14,8 +14,8 @@ import type {
   GameLoopOnUpdate,
   ScreenType,
   TouchProcessorFinalReturn,
-} from "types";
-import type { Optional } from "typeUtils";
+} from "./types";
+import type { Optional } from "./typeUtils";
 import DefaultTimer from "./DefaultTimer";
 import DefaultTouchProcessor from "./DefaultTouchProcessor";
 
