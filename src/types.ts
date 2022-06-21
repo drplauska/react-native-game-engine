@@ -6,12 +6,14 @@ import DefaultTouchProcessor from "./DefaultTouchProcessor";
 
 type RendererElement = React.ElementType | { type: React.ElementType }; // would RendererElement accept functional components?
 
+type EmptyObject = Record<string, unknown>;
+
 type Entity = {
   renderer?: RendererElement;
   [key: string]: unknown;
 };
-type Entities = { [key: string]: Entity };
-type EntitiesMaybePromise = Entities | Promise<Entities>;
+type Entities<T = EmptyObject> = { [key: string]: Entity } & T;
+type EntitiesMaybePromise<T = EmptyObject> = Entities<T> | Promise<Entities<T>>;
 
 type ScreenType = ScaledSize;
 
@@ -102,4 +104,5 @@ export {
   GameLoopOnUpdate,
   System,
   SystemParams,
+  EmptyObject,
 };

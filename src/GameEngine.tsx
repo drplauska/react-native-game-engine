@@ -20,6 +20,7 @@ import type {
   ScreenType,
   EntitiesMaybePromise,
   System,
+  EmptyObject,
 } from "./types";
 import DefaultTouchProcessor from "./DefaultTouchProcessor";
 import type { Optional } from "./typeUtils";
@@ -54,9 +55,9 @@ const isPromise = (obj: any): obj is Promise<any> => {
   );
 };
 
-interface GameEngineProps {
+interface GameEngineProps<T = EmptyObject> {
   systems: System[];
-  entities?: EntitiesMaybePromise;
+  entities?: EntitiesMaybePromise<T>;
   renderer?: Renderer;
   touchProcessor: ReturnType<typeof DefaultTouchProcessor>;
   timer?: DefaultTimer;
@@ -70,8 +71,8 @@ interface GameEngineState {
   entities: Entities;
 }
 
-export default class GameEngine extends Component<
-  GameEngineProps,
+export default class GameEngine<T> extends Component<
+  GameEngineProps<T>,
   GameEngineState
 > {
   timer: DefaultTimer;
@@ -94,7 +95,7 @@ export default class GameEngine extends Component<
     running: true,
   };
 
-  constructor(props: GameEngineProps) {
+  constructor(props: GameEngineProps<T>) {
     super(props);
     this.state = {
       entities: {},
