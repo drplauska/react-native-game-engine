@@ -5,17 +5,18 @@ import DefaultTouchProcessor from "./DefaultTouchProcessor";
 declare type RendererElement = React.ElementType | {
     type: React.ElementType;
 };
-declare type Entity = {
+declare type Entity<T = void> = T extends void ? {
     renderer?: RendererElement;
     [key: string]: unknown;
+} : {
+    renderer?: RendererElement;
+    [key: string]: unknown;
+} & {
+    [key: string]: T;
 };
-declare type Entities<OneTruth> = OneTruth extends void ? {
-    [key: string]: Entity;
-} : OneTruth extends Record<string, unknown> ? {
-    [key: string]: Entity;
-} & OneTruth[string] : {
-    [key: string]: Entity;
-} & OneTruth;
+declare type Entities<OneTruth> = {
+    [key: string]: Entity<OneTruth>;
+};
 declare type EntitiesMaybePromise<OneTruth> = Entities<OneTruth> | Promise<Entities<OneTruth>>;
 declare type ScreenType = ScaledSize;
 declare type OnUpdateCallback = (time: number) => void;

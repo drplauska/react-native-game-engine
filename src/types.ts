@@ -17,9 +17,9 @@ type Entity<T = void> = T extends void
     } & {
       [key: string]: T;
     };
-type Entities<OneTruth> = OneTruth extends void
-  ? { [key: string]: Entity }
-  : { [key: string]: Entity<OneTruth> };
+
+type Entities<OneTruth> = { [key: string]: Entity<OneTruth> };
+
 type EntitiesMaybePromise<OneTruth> =
   | Entities<OneTruth>
   | Promise<Entities<OneTruth>>;
